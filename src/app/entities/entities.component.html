@@ -1,0 +1,43 @@
+<div class="filters">
+  <mat-form-field>
+    <mat-select placeholder="Entité" 
+                [(value)]="selectedEntity" 
+                name="entity"
+                (change)="onEntityChange($event)">
+      <mat-option *ngFor="let entity of entities" [value]="entity">
+        {{entity.LibelleBureau}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Niveau des indicateurs" 
+                [(value)]="selectedIndicatorLevel" 
+                name="level"
+                (change)="onFilterChange($event)">
+      <mat-option *ngFor="let level of indicatorLevels" [value]="level.value">
+        {{level.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-select placeholder="Tendance des indicateurs" 
+                [(value)]="selectedIndicatorTrending" 
+                name="trending"
+                (change)="onFilterChange($event)">
+      <mat-option *ngFor="let trending of indicatorTrendings" [value]="trending.value">
+        {{trending.viewValue}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div *ngIf="selectedIndicators">
+  <div class="wrap">
+    <app-indicator
+      *ngFor="let indicator of selectedIndicators"
+      [indicator]="indicator">
+    </app-indicator>
+  </div>
+</div> 

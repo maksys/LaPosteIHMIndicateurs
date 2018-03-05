@@ -1,0 +1,35 @@
+.list {
+    width: 100%;
+    height: 10em;
+    line-height: 1.5em;
+    border: 1px solid #ccc;
+    padding: 0;
+    margin: 0;
+    overflow: scroll;
+    overflow-x: hidden;
+}
+
+.list li {
+    padding: 0 1em;
+    border-top: 1px solid #ccc;
+    cursor: pointer;
+}
+
+.filters {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+} 
+
+.filters mat-form-field {
+    margin-right: 2em;
+}
+
+.wrap {
+    display: flex;
+    flex-wrap: wrap;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    height: 20em;
+    width: 100%;
+} 

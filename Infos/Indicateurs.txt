@@ -1,0 +1,26 @@
+COD_DOMAINE	COD_INDICATEUR	    LIB_DOMAINE	                        LIB_INDICATEUR
+QSA016	    I0645	            Automates	                        Automates bancaires
+QSA016	    I0646	            Automates	                        Automates Courrier-Colis
+QSA016	    I0647	            Automates	                        Automates
+QSA016	    I0648	            Automates	                        Automates Nabanco
+CDP016	    I0660	            Perf globale CTRL PROD CAISSE	    Erreurs de caisse 
+CDP016	    I0675	            Perf globale CTRL PROD CAISSE	    Validation situation de caisse J à J+1
+CDP016	    I0678	            Perf globale CTRL PROD CAISSE	    Fichier d'échange
+CDP016	    I0679	            Perf globale CTRL PROD CAISSE	    Perf globale Contrôle de production Caisse
+CDP016	    I0680	            Perf globale CTRL PROD CAISSE	    Qualité des pièces justificatives
+QHR016	    I0684	            Qualité des Horaires Réseau	        Qualité des Horaires Réseau
+SMA016	    I0691	            Numérique	                        Utilisation Smarteo au dépôt
+SMA016	    I0692	            Numérique	                        Utilisation Smarteo au retrait
+SMA016	    I0693	            Numérique	                        Performance Globale Numérique
+SMA016	    I0973	            Numérique	                        Utilisation Smarteo à la vente
+ENC016	    I0696	            Gestion du Fiduciaire	            Rotation du stock d'encaisse
+ENC016	    I0697	            Gestion du Fiduciaire	            Gestion du fiduciaire
+GDS016	    NOT01_ACO	        Perf globale Logistique-Appro	    Couverture de stock Produits
+GDS016	    NOT02_ACO	        Perf globale Logistique-Appro	    Respect plan de livraison
+GDS016	    NOT06_ACO	        Perf globale Logistique-Appro	    Perf globale Logistique-Appro
+GDS016	    NOT08_ACO	        Perf globale Logistique-Appro	    Respect délai réception livraisons DAPO
+GDS016	    NOT09_ACO	        Perf globale Logistique-Appro	    Démarque
+GDR016	    NOTE_ARR_GDR_ACO	Perf globale Courrier-Colis	        Flashage arrivée d'instance
+GDR016	    NOTE_CPT_SIG_ACO	Perf globale Courrier-Colis	        Capture de Signature
+GDR016	    NOTE_GDR_ACO	    Perf globale Courrier-Colis	        Perf globale Courrier-Colis
+GDR016	    NOTE_LEV_GDR_ACO	Perf globale Courrier-Colis	        Flashage Levée d'instance

@@ -1,0 +1,17 @@
+<div class="card"
+    [ngStyle]="{'background-color':getColor()}">
+  <div class="title">{{title}}</div>
+  <div class="columns">
+    <circle-progress
+      *ngIf="hasTrending"
+      titleColor="#FFFFFF"
+      unitsColor="#FFFFFF"
+      outerStrokeColor="#FFFFFF"
+      innerStrokeColor="#FFFFFF55"
+      [backgroundStroke]="backgroundColor"
+      [title]="percent"
+      [percent]="circlePercent">
+    </circle-progress>
+    <i class="material-icons progression">{{trending}}</i>
+  </div>
+</div>
