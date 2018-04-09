@@ -9,14 +9,26 @@
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   
   <!-- Icons -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
 
 </head>
 <body>
   <app-root></app-root>
-
   <script>
-    // addEventListener support for IE8
+    var isIE = /*@cc_on!@*/false || !!document.documentMode;
+    if (isIE){
+      console.log('Hello IE :(');
+      //add custom event for IE
+      function CustomEvent ( event, params ) {
+        params = params || { bubbles: false, cancelable: false, detail: undefined };
+        var evt = document.createEvent( 'CustomEvent' );
+        evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
+        return evt;
+      }
+      CustomEvent.prototype = window.Event.prototype;
+      window.CustomEvent = CustomEvent;
+    }
+    
     function bindEvent(element, eventName, eventHandler) {
       if (element.addEventListener){
         element.addEventListener(eventName, eventHandler, false);
@@ -24,13 +36,17 @@
         element.attachEvent('on' + eventName, eventHandler);
       }
     }
-    // Listen to message from child window
+
+    //Listen to message from child window
     bindEvent(window, 'message', function (e) {
-      //document.body.style.backgroundColor = e.data;
-      window.dispatchEvent(new CustomEvent('chatframe-event', {detail: e.data}));
+      console.log("ASSERT")
+      if (!e){
+        return;
+      }
+
+      console.log('Event received');
+      window.dispatchEvent(new window.CustomEvent('forwardEvent-event', {detail: e}));
     });
   </script>
-
-
 </body>
 </html>

@@ -30,8 +30,18 @@ export class InMemoryEntityService implements InMemoryDbService {
     return map;
   }
 
+  private buildCodeDexToTrigrammeMap(): Map<number,string>{
+    const map = new Map<number,string>();
+    for(let entity of ENTITIES_DATA){
+      map.set(entity.CodeRegate, entity.LibelleDex.substr(0, 3).toUpperCase());
+    }
+
+    return map;
+  }
+
   private buildIndicatorValues(indicatorValuesData: string[]): IndicatorValue[]{
     // We create maps to get labels from code
+    const codeDexToTrigrammeMap = this.buildCodeDexToTrigrammeMap();
     const codeToDomainMap = this.buildCodeToLabelMap(CODE_TO_DOMAIN_DATA)
     const codeToIndicatorMap = this.buildCodeToLabelMap(CODE_TO_INDICATOR_DATA);
 
@@ -48,6 +58,7 @@ export class InMemoryEntityService implements InMemoryDbService {
       newValue.codeIndicateur = values[1];
       newValue.libelleIndicateur = codeToIndicatorMap.get(newValue.codeIndicateur);
       newValue.codeRegate = +values[2];
+      newValue.trigramme = codeDexToTrigrammeMap.get(newValue.codeRegate);
       newValue.idTemp = +values[3];
       newValue.value = +values[4];
       indicatorValues.push(newValue);            

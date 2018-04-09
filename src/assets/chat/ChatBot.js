@@ -1,33 +1,42 @@
+const params = BotChat.queryParams(location.search);
+
+const user = {
+  id: params['userid'] || 'userid',
+  name: params['username'] || 'username'
+};
+
+const bot = {
+  id: params['botid'] || 'botid',
+  name: params['botname'] || 'botname'
+};
+
+window['botchatDebug'] = params['debug'] && params['debug'] === 'true';
+
+// Uncomment the followong block before deploying
 const botConnection = new BotChat.DirectLine({
-    domain: 'http://localhost:3000/directline',
-    secret: 's',
-    token: 't',
-    webSocket: false
+  domain: params['domain'],
+  secret: 'yGEdM4QlNvk.cwA.u8g.ut2dVoTm_nsYeRmPEXk916LHznRYJ9K2fBDvPtbefN0',
+  token: params['t'],
+  webSocket: params['webSocket'] && params['webSocket'] === 'true' // defaults to true
 });
 
-// We launch the bot chat application
+// Uncomment the following block to use localdirect line
+// const botConnection = new BotChat.DirectLine({
+//     domain: 'http://localhost:3000/directline',
+//     secret: 's',
+//     token: 't',
+//     webSocket: false
+// });
+
 BotChat.App({
-    directLine: botConnection,
-    user: { id: 'userid' },
-    bot: { id: 'botid' },
-    resize: 'detect'
-  }, 
-  document.getElementById("bot")
-);
+  bot: bot,
+  botConnection: botConnection,
+  user: user
+}, document.getElementById('bot'));
 
 botConnection.activity$.filter(function (activity) {
-    return activity.type === 'event' && activity.name === 'searchResult';
+    return activity.type === 'event';
 }).subscribe(function (activity) {
-    console.log('"searchResult" received with value: ' + activity.value);
-    searchResult(activity.value);
+    console.log('Activity received');
+    window.parent.postMessage(activity, '*');
 });
-
-function searchResult(result) {
-    sendMessage(result);
-}
-
-// Send a message to the parent
-function sendMessage (msg) {
-    console.log(`message sent to parent: ${msg}`);
-    window.parent.postMessage(msg, '*');
-};

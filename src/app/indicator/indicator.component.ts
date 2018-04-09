@@ -18,6 +18,7 @@ export class IndicatorComponent implements OnInit {
   // Properties
   //===============================================================================
   public title: string;
+  public trigramme: string;
   public percent: number;
   public circlePercent: number;
   public backgroundColor: string;
@@ -31,6 +32,7 @@ export class IndicatorComponent implements OnInit {
   set indicator(indicator: Indicator) {
     this._indicator = indicator;
     this.title = this._indicator.libelleIndicateur;
+    this.trigramme = this._indicator.trigramme;
     this.percent = this._indicator.percent;
     this.circlePercent = this.percent%100;
     

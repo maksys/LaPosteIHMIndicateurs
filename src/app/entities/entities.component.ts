@@ -14,15 +14,12 @@ export class EntitiesComponent implements OnInit {
   //===============================================================================
   // Fields
   //===============================================================================
-  private _lastEntity: Entity;
-
+  
   //===============================================================================
   // Properties
   //===============================================================================
-  public entities: Entity[];
-  public selectedEntity: Entity;
-
-  public entityPath: Entity[];
+  public dexEntities: Entity[];
+  public selectedDexEntity: Entity;
 
   public indicators: Indicator[];
   public selectedIndicators: Indicator[];
@@ -45,16 +42,16 @@ export class EntitiesComponent implements OnInit {
   public selectedIndicatorTrending= '';
 
   public luisColorToColor = [
-    {luis: 'vert', value: environment.goodColor},
-    {luis: 'orange', value: environment.warnColor},
-    {luis: 'rouge', value: environment.badColor},
-    {luis: 'gris', value: environment.noneColor},
+    {luis: 'Vert', value: environment.goodColor},
+    {luis: 'Orange', value: environment.warnColor},
+    {luis: 'Rouge', value: environment.badColor},
+    {luis: 'Gris', value: environment.noneColor},
   ];
 
   public luisTrendingToTrending = [
-    {luis: 'hausse', value: environment.trendingUp},
-    {luis: 'stable', value: environment.trendingFlat},
-    {luis: 'baisse', value: environment.trendingDown},
+    {luis: 'Hausse', value: environment.trendingUp},
+    {luis: 'Stable', value: environment.trendingFlat},
+    {luis: 'Baisse', value: environment.trendingDown},
   ];
 
   //===============================================================================
@@ -70,53 +67,69 @@ export class EntitiesComponent implements OnInit {
   //===============================================================================
   // Listeners
   //===============================================================================
-  @HostListener('window:chatframe-event', ['$event']) 
-  updateFilters(event: CustomEvent) {
+  @HostListener('window:forwardEvent-event', ['$event']) 
+  handleEvents(event: CustomEvent) {
+    if(!event.detail.data || !event.detail.data.name){
+      return;
+    }
+
+    if (event.detail.data.name === 'searchResult'){
+      this.updateFilters(event.detail.data.value);
+      return;
+    }
+
+    if (event.detail.data.name === 'reset'){
+      this.reset();
+      return;
+    }
+
+    if (event.detail.data.name === 'help'){
+      this.updateFilters(event.detail.data.value);
+      return;
+    }
+  }
+
+  private reset(){
+    this.selectedDexEntity = null;
+    this.selectedIndicatorLevel = '';
+    this.selectedIndicatorTrending = '';
+    this.updateSelectedEntities();
+  }
+
+  private updateFilters(value: any)
+  {
     // We try to find the corresponding indicator color
-    const wantedSector = event.detail.Secteur.toUpperCase();
-    const wantedColor = this.translateFromLuis(event.detail.Couleur, this.luisColorToColor);
-    const wantedTrending = this.translateFromLuis(event.detail.Tendance, this.luisTrendingToTrending);
+    const wantedSector = value.Secteur ? value.Secteur.toUpperCase() : null;
+    const wantedColor = this.translateFromLuis(value.Couleur, this.luisColorToColor);
+    const wantedTrending = this.translateFromLuis(value.Tendance, this.luisTrendingToTrending);
 
     // We filter the sector
     if (wantedSector){
-      for (let sector of this.entities){
+      for (let sector of this.dexEntities){
         if (sector.LibelleBureau.indexOf(wantedSector) !== -1){
-          this.selectedEntity = sector;
-          this._lastEntity = this.selectedEntity;
+          this.selectedDexEntity = sector;
         }
       }
     }
 
     if (wantedColor){
-      if (wantedColor === environment.noneColor){
-        this.selectedIndicatorLevel = '';
-        this.selectedIndicatorTrending = environment.trendingNone
-      } else {
-        this.selectedIndicatorTrending = '';
-        for(let entry of this.indicatorLevels){
-          if (entry.value === wantedColor){
-            this.selectedIndicatorLevel = wantedColor;
-            break;
-          }
+      for(let entry of this.indicatorLevels){
+        if (entry.value === wantedColor){
+          this.selectedIndicatorLevel = wantedColor;
+          break;
         }
       }
-    } else {
-      this.selectedIndicatorLevel = '';
     }
-
+ 
     if (wantedTrending){
       for (let trending of this.indicatorTrendings){
         if (trending.value === wantedTrending){
           this.selectedIndicatorTrending = trending.value;
         }
       }
-    } else if (wantedColor !== environment.noneColor) {
-      this.selectedIndicatorTrending = '';
     }
     
-    if (this._lastEntity){
-      this.getIndicatorsForEntity(this._lastEntity);
-    }
+    this.updateSelectedEntities();
   }
   
   private translateFromLuis(luisValue: string, translations: Array<any>): string{
@@ -138,10 +151,10 @@ export class EntitiesComponent implements OnInit {
   }
 
   private filterDexes(entities: Entity[]) {
-    this.entities = new Array<Entity>();
+    this.dexEntities = new Array<Entity>();
     for(let entity of entities) {
       if (this.entityIsDex(entity)){
-        this.entities.push(entity)
+        this.dexEntities.push(entity)
       }
     }
   }
@@ -162,8 +175,7 @@ export class EntitiesComponent implements OnInit {
   }  
 
   public onEntityChange(eventValue){
-    this._lastEntity = this.selectedEntity;
-    this.getIndicatorsForEntity(this._lastEntity);
+    this.updateSelectedEntities();
   }
 
   //===============================================================================
@@ -171,21 +183,29 @@ export class EntitiesComponent implements OnInit {
   //===============================================================================
   private getIndicators(){
     this.entityService.getIndicators().subscribe(
-      indicators => { this.indicators = indicators }
+      indicators => {
+         this.indicators = indicators 
+         this.updateSelectedEntities();
+      }
     );
   }
   
-  private getIndicatorsForEntity(entity: Entity){
-    this._lastEntity = entity;
+  private updateSelectedEntities(){
     this.selectedIndicators = new Array<Indicator>();
+    var numberOfIndicators = 100;
 
     for (let indicator of this.indicators){
-      if (indicator.codeRegate !== entity.CodeRegate){
+      if (this.selectedDexEntity && (indicator.codeRegate !== this.selectedDexEntity.CodeRegate)){
         continue;
       }
 
       if (!this.filtersOK(indicator)){
         continue;
+      }
+
+      numberOfIndicators--;
+      if (numberOfIndicators === 0){
+        return;
       }
 
       this.selectedIndicators.push(indicator);
@@ -205,6 +225,6 @@ export class EntitiesComponent implements OnInit {
     if (this.indicators.length === 0){
       return;
     }
-    this.getIndicatorsForEntity(this._lastEntity);
+    this.updateSelectedEntities();
   }
 }

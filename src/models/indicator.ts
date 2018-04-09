@@ -17,11 +17,14 @@ export class Indicator implements IndicatorIdentification{
     public value: number;
 
     // Calculated properties
+    public trigramme = '';
     public percent = 0;
     public color = environment.noneColor;
     public trending = environment.trendingNone;
 
     constructor(indicatorValue: IndicatorValue){
+        this.trigramme = indicatorValue.trigramme;
+
         this.codeRegate = indicatorValue.codeRegate;
         this.codeDomaine = indicatorValue.codeDomaine;
         this.codeIndicateur = indicatorValue.codeIndicateur;

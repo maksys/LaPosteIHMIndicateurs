@@ -6,6 +6,7 @@ export interface IndicatorIdentification{
 
 export class IndicatorValue implements IndicatorIdentification{
     // Properties
+    public trigramme: string;
     public codeDomaine: string;
     public libelleDomaine: string;
     public codeIndicateur: string;

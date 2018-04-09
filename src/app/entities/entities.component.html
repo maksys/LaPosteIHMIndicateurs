@@ -1,10 +1,10 @@
 <div class="filters">
   <mat-form-field>
     <mat-select placeholder="Entité" 
-                [(value)]="selectedEntity" 
+                [(value)]="selectedDexEntity" 
                 name="entity"
                 (change)="onEntityChange($event)">
-      <mat-option *ngFor="let entity of entities" [value]="entity">
+      <mat-option *ngFor="let entity of dexEntities" [value]="entity">
         {{entity.LibelleBureau}}
       </mat-option>
     </mat-select>

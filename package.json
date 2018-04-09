@@ -16,7 +16,7 @@
     "@angular/cdk": "^5.2.3",
     "@angular/common": "^5.2.0",
     "@angular/compiler": "^5.2.0",
-    "@angular/core": "^5.2.0",
+    "@angular/core": "^5.2.6",
     "@angular/forms": "^5.2.0",
     "@angular/http": "^5.2.0",
     "@angular/material": "^5.2.3",
@@ -28,6 +28,7 @@
     "botframework-webchat": "^0.11.4",
     "core-js": "^2.4.1",
     "linq": "^3.0.9",
+    "material-design-icons": "^3.0.1",
     "ng-circle-progress": "^0.9.9",
     "rxjs": "^5.5.6",
     "zone.js": "^0.8.19"
