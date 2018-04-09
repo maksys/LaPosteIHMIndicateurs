@@ -82,11 +82,6 @@ export class EntitiesComponent implements OnInit {
       this.reset();
       return;
     }
-
-    if (event.detail.data.name === 'help'){
-      this.updateFilters(event.detail.data.value);
-      return;
-    }
   }
 
   private reset(){
@@ -105,14 +100,22 @@ export class EntitiesComponent implements OnInit {
 
     // We filter the sector
     if (wantedSector){
-      for (let sector of this.dexEntities){
-        if (sector.LibelleBureau.indexOf(wantedSector) !== -1){
-          this.selectedDexEntity = sector;
+      if (wantedSector === 'TOUS'){
+        this.selectedDexEntity = null;
+      } else {
+        for (let sector of this.dexEntities){
+          if (sector.LibelleBureau.indexOf(wantedSector) !== -1){
+            this.selectedDexEntity = sector;
+            break;
+          }
         }
       }
     }
 
-    if (wantedColor){
+    if (wantedColor !== null){
+      if (this.stringIsAll(wantedColor)){
+        this.selectedIndicatorLevel = '';
+      }
       for(let entry of this.indicatorLevels){
         if (entry.value === wantedColor){
           this.selectedIndicatorLevel = wantedColor;
@@ -121,10 +124,14 @@ export class EntitiesComponent implements OnInit {
       }
     }
  
-    if (wantedTrending){
+    if (wantedTrending !== null){
+      if (this.stringIsAll(wantedTrending)){
+        this.selectedIndicatorTrending = '';
+      }
       for (let trending of this.indicatorTrendings){
         if (trending.value === wantedTrending){
           this.selectedIndicatorTrending = trending.value;
+          break;
         }
       }
     }
@@ -132,13 +139,17 @@ export class EntitiesComponent implements OnInit {
     this.updateSelectedEntities();
   }
   
+  private stringIsAll(value: string): boolean{
+    return value === "" || value === 'Toutes'|| value === 'Toute';
+  }
+
   private translateFromLuis(luisValue: string, translations: Array<any>): string{
     for(let translation of translations){
       if (luisValue === translation.luis){
         return translation.value;
       }
     }
-    return '';
+    return luisValue;
   }
 
   //===============================================================================
